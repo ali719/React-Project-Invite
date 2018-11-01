@@ -4,6 +4,7 @@
 import React, {Component} from 'react';
 import { NavBar, InputItem, Button,WingBlank, WhiteSpace } from 'antd-mobile';
 import Logo from '../logo';
+import {reqLogin} from '../../api'
 
 class Login extends Component {
   state = {
@@ -17,6 +18,9 @@ class Login extends Component {
       [name]:val
     })
     
+  }
+  login = () =>{
+  
   }
   goRegister = () => {
     //跳转注册
@@ -34,7 +38,7 @@ class Login extends Component {
             <WhiteSpace/>
             <InputItem placeholder="请输入密码" type="password" onChange={val => this.handleChange('password',val)}>密码：</InputItem>
             <WhiteSpace />
-            <Button type="primary" >登 录</Button>
+            <Button type="primary" onClick = {this.login}>登 录</Button>
             <Button onClick = {this.goRegister}>还没有有账户</Button>
           </form>
         </WingBlank>

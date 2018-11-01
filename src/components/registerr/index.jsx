@@ -4,6 +4,7 @@
 import React, {Component} from 'react';
 import { NavBar, List, InputItem,Radio, Button,WingBlank, WhiteSpace } from 'antd-mobile';
 import Logo from '../logo';
+import {reqRegister} from '../../api';
 
 const Item = List.Item;
 class Register extends Component {
@@ -22,10 +23,18 @@ class Register extends Component {
     
   }
   
-  register = () =>{
+  register = async () =>{
     //获取表单数据
     const {username,password,rePassword,type} =this.state;
     console.log(username,password,rePassword,type);
+    //判断密码和确认密码是否一致
+    if (password === rePassword){
+      //发送ajax请求
+      const data = await reqRegister({username,password,type});
+      console.log(data);
+    }else {
+      alert('两次密码输入不一致');
+    }
     
   }
   goLogin = () =>{
