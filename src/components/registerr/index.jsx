@@ -3,11 +3,17 @@
  */
 import React, {Component} from 'react';
 import { NavBar, List, InputItem,Radio, Button,WingBlank, WhiteSpace } from 'antd-mobile';
+import PropTypes from 'prop-types';
+
 import Logo from '../logo';
-import {reqRegister} from '../../api';
+
 
 const Item = List.Item;
 class Register extends Component {
+  static propTypes ={
+    user:PropTypes.object.isRequired,
+    register:PropTypes.func.isRequired
+  }
   state = {
     username:'',
     password:'',
@@ -27,14 +33,9 @@ class Register extends Component {
     //获取表单数据
     const {username,password,rePassword,type} =this.state;
     console.log(username,password,rePassword,type);
-    //判断密码和确认密码是否一致
-    if (password === rePassword){
-      //发送ajax请求
-      const data = await reqRegister({username,password,type});
-      console.log(data);
-    }else {
-      alert('两次密码输入不一致');
-    }
+      //发送ajax请求,更新状态
+    this.props.register({username,password,rePassword,type});
+
     
   }
   goLogin = () =>{
@@ -43,12 +44,19 @@ class Register extends Component {
     
   }
   render () {
-    const {type} = this.state
+    const {type} = this.state;
+    const {msg,redirectTo} = this.props.user;
+    console.log(msg);
+    
+    if (redirectTo){
+      return <Register to={redirectTo} />
+    }
     return (
       <div>
         <NavBar>硅 谷 直 聘</NavBar>
         <Logo/>
         <WingBlank>
+          {msg ? <p className="err">{msg}</p>:''}
           <form>
             <WhiteSpace/>
             <InputItem placeholder="请输入用户名" onChange={val => this.handleChange('username',val)}>用户名：</InputItem>

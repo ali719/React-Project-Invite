@@ -4,7 +4,7 @@
 import React, {Component} from 'react';
 import { NavBar, InputItem, Button,WingBlank, WhiteSpace } from 'antd-mobile';
 import Logo from '../logo';
-import {reqLogin} from '../../api'
+import {reqLogin} from '../../api';
 
 class Login extends Component {
   state = {
@@ -19,8 +19,14 @@ class Login extends Component {
     })
     
   }
-  login = () =>{
-  
+  login = async () =>{
+    //获取表单数据
+    const {username,password} =this.state;
+    console.log(username,password);
+      //发送ajax请求
+      const data = await reqLogin({username,password});
+      console.log(data);
+    
   }
   goRegister = () => {
     //跳转注册
