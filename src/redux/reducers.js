@@ -17,10 +17,10 @@ const initUserState = {
 function user(preState = initUserState,action) {
   switch (action.type){
     case AUTH_SUCCESS:
-      return {username:action.data.username,type:action.data.type,msg:'',redirectTo:getRedirectPath(action.data.type,action.data.header)}
+      return {...action.data,msg:'',redirectTo:getRedirectPath(action.data.type,action.data.header)}
     case ERR_MSG:
       console.log(action.data);
-      return {...preState,msg:action.data.msg};
+      return {...action.data};
     case UPDATE_USER:
       return action.data;
     case RESET_USER:

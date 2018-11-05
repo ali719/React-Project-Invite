@@ -4,9 +4,15 @@
 import React, {Component} from 'react';
 import { NavBar, InputItem, Button,WingBlank, WhiteSpace } from 'antd-mobile';
 import Logo from '../logo';
-import {reqLogin} from '../../api';
+import PropTypes from 'prop-types';
+import {Redirect} from 'react-router-dom';
 
 class Login extends Component {
+  static propTypes ={
+    user:PropTypes.object.isRequired,
+    login:PropTypes.func.isRequired
+  }
+  
   state = {
     username:'',
     password:'',
@@ -17,27 +23,31 @@ class Login extends Component {
     this.setState({
       [name]:val
     })
-    
   }
+  
   login = async () =>{
     //获取表单数据
     const {username,password} =this.state;
     console.log(username,password);
-      //发送ajax请求
-      const data = await reqLogin({username,password});
-      console.log(data);
-    
+    //发送ajax请求,更新状态
+    this.props.login({username,password});
   }
+  
   goRegister = () => {
     //跳转注册
     this.props.history.replace('/register')
   }
   render () {
+    const {msg,redirectTo} = this.props.user;
+    if (redirectTo){
+      return <Redirect to={redirectTo} />
+    }
     return (
       <div>
         <NavBar>硅 谷 直 聘</NavBar>
         <Logo/>
         <WingBlank>
+          {msg ? <p className="err">{msg}</p>:''}
           <form>
             <WhiteSpace/>
             <InputItem placeholder="请输入用户名" onChange={val => this.handleChange('username',val)}>用户名：</InputItem>

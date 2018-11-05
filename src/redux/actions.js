@@ -22,6 +22,7 @@ export const register = data => {
   // data用户提交的请求参数
   // 表单验证，同步方式
   const {username,password,rePassword,type} = data;
+  // console.log(data)
   if (!username){
     return errMsg({username,password,msg:'请输入用户名'});
   }else if (!password){
@@ -36,39 +37,83 @@ export const register = data => {
     reqRegister(data)
       .then(res =>{
         //请求成功
+        console.log(res)
         const result = res.data;
+        console.log(result)
         if (result.code === 0){
           //注册成功
           dispatch(authSuccess(result.data));
         }else {
           //注册失败
           console.log(result.msg);
-          dispatch(errMsg(result.msg));
+          dispatch(errMsg({msg: result.msg}));
         }
       })
-      .catch(err =>{
+      .catch(err => {
         //请求失败
+        console.log(1111);
         console.log(err);
         dispatch(errMsg({msg: '网络不稳定，请重新试试~', username: data.username, type: data.type}));
       })
   }
 }
 
+//登录
+export const login = data => {
+  // data用户提交的请求参数
+  // 表单验证，同步方式
+  const {username,password} = data;
+  // console.log(data)
+  if (!username){
+    return errMsg({username,password,msg:'请输入用户名'});
+  }else if (!password){
+    return errMsg({username,password,msg:'请输入密码'});
+  }
+  
+  return dispatch =>{
+    //发送ajax请求
+    reqLogin(data)
+      .then(res =>{
+        //请求成功
+        // console.log(res)
+        const result = res.data;
+        // console.log(result)
+        if (result.code === 0){
+          //注册成功
+          dispatch(authSuccess(result.data));
+        }else {
+          //注册失败
+          console.log(result.msg);
+          dispatch(errMsg({msg: result.msg}));
+        }
+      })
+      .catch(err => {
+        //请求失败
+        console.log(1111);
+        console.log(err);
+        dispatch(errMsg({msg: '网络不稳定，请重新试试~'}));
+      })
+  }
+}
 
 // 更新用户数据的一步action
 export const updateUserInfo = data =>{
   //表单验证
-  const {header,post,company,salary,info} = data;
+  const {header,post,company,salary,info,type} = data;
   if (!header){
     return resetUser({msg:'请选择头像'});
   }else if (!post){
-    return resetUser({msg:'请输入招聘单位'});
-  }else if (!company){
-    return resetUser({msg:'请输入公司名称'});
-  }else if (!salary){
-    return resetUser({msg:'请输入薪资范围'});
+    return resetUser({msg:type === 'boss' ? '请输入招聘单位':'请输入求职岗位'});
   }else if (!info){
-    return resetUser({msg:'请输入公司简介'});
+    return resetUser({msg: type === 'boss' ? '请输入公司简介':'请输入个人介绍'});
+  }
+  
+  if (type === 'boss'){
+    if (!company){
+      return resetUser({msg:'请输入公司名称'});
+    }else if (!salary){
+      return resetUser({msg:'请输入薪资范围'});
+    }
   }
   
   
@@ -80,7 +125,7 @@ export const updateUserInfo = data =>{
         const result = res.data;
         if (result.code === 0){
           //更新成功
-          dispatch(updateUser(result,data));
+          dispatch(updateUser(result.data));
         }else {
         //失败
           dispatch(resetUser({msg:result.msg}));

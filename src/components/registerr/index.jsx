@@ -4,6 +4,7 @@
 import React, {Component} from 'react';
 import { NavBar, List, InputItem,Radio, Button,WingBlank, WhiteSpace } from 'antd-mobile';
 import PropTypes from 'prop-types';
+import {Redirect} from 'react-router-dom'
 
 import Logo from '../logo';
 
@@ -18,7 +19,7 @@ class Register extends Component {
     username:'',
     password:'',
     rePassword:'',
-    type:'Boss'
+    type:'boss'
   }
   
   handleChange = (name,val) => {
@@ -35,8 +36,6 @@ class Register extends Component {
     console.log(username,password,rePassword,type);
       //发送ajax请求,更新状态
     this.props.register({username,password,rePassword,type});
-
-    
   }
   goLogin = () =>{
     //跳转登录
@@ -46,11 +45,13 @@ class Register extends Component {
   render () {
     const {type} = this.state;
     const {msg,redirectTo} = this.props.user;
-    console.log(msg);
+    // console.log(msg,redirectTo );
     
+
     if (redirectTo){
-      return <Register to={redirectTo} />
+      return <Redirect to={redirectTo} />
     }
+
     return (
       <div>
         <NavBar>硅 谷 直 聘</NavBar>
@@ -68,7 +69,7 @@ class Register extends Component {
             <Item>
               用户类型： &nbsp;&nbsp;
               <Radio className="my-radio" checked={type === 'dashen'} onChange={() => this.handleChange('type','dashen')}>大神</Radio> &nbsp;&nbsp;&nbsp;&nbsp;
-              <Radio className="my-radio"checked={type === 'Boss'} onChange={() => this.handleChange('type','Boss')}>老板</Radio>
+              <Radio className="my-radio"checked={type === 'boss'} onChange={() => this.handleChange('type','boss')}>老板</Radio>
             </Item>
             <WhiteSpace />
             <Button type="primary"  onClick = {this.register}>注 册</Button>

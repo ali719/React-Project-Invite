@@ -8,7 +8,7 @@ export function getRedirectPath(type,header) {
   if (type ==='boss'){
     path = '/boss'
   }else {
-    path ='/dashen;'
+    path ='/dashen'
   }
   
   if (!header){
